@@ -15,6 +15,8 @@ function CuentaDetails() {
 
     useEffect(() => {
         getCuentas();
+        getIngresos();
+        getGastos();
     }, []);
 
     const getCuentas = async () => {
@@ -39,7 +41,7 @@ function CuentaDetails() {
 
             const response = await service.get(`/gastos/cuentas/${params.cuentaId}`);
             setGastos(response.data);
-            console.log(response.data)
+            console.log("gastos")
         } catch (error) {
             console.log(error)
         }
@@ -51,7 +53,7 @@ function CuentaDetails() {
 
             const response = await service.get(`/ingresos/cuentas/${params.cuentaId}`);
             setIngresos(response.data);
-            console.log(response.data)
+            console.log("ingresos")
         } catch (error) {
             console.log(error)
         }
