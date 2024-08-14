@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import service from '../service/service.config';
+import CardCuenta from '../components/CardCuenta';
 
 function CuentasPage() {
 
@@ -15,9 +16,7 @@ function CuentasPage() {
 
     try {
 
-      const response = await service.get(
-        `${import.meta.env.VITE_SERVER}/cuentas`
-      );
+      const response = await service.get(`/cuentas`);
 
       setCuentas(response.data);
       console.log(response.data)
@@ -37,7 +36,8 @@ function CuentasPage() {
       <h2>Cuentas</h2>
       <div>
         {cuentas.map((eachCuenta) => {
-          return <h4>{eachCuenta.name}</h4>
+          console.log(eachCuenta)
+          return <CardCuenta key={eachCuenta._id} eachCuenta={eachCuenta} />
         })}
       </div>
     </>

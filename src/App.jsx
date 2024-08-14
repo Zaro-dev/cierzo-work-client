@@ -10,6 +10,7 @@ import CuentasPage from './pages/CuentasPage';
 import MovimientosPage from './pages/MovimientosPage';
 import GastosPage from './pages/GastosPage';
 import IngresosPage from './pages/IngresosPage';
+import CuentaDetails from './pages/CuentaDetails';
 
 // COMPONENTS
 import MyNavbar from './components/Navbar'

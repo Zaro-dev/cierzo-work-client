@@ -18,7 +18,7 @@ function CuentaDetails() {
         try {
             
             const response = await service.get(
-                `${import.meta.env.VITE_SERVER}/cuentas/${params.cuentaId}`
+                `/cuentas/${params.cuentaId}`
             );
 
             setCuenta(response.data);
