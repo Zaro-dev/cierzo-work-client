@@ -9,11 +9,15 @@ function CuentaDetails() {
     const navigate = useNavigate();
 
     const [cuenta, setCuenta] = useState(null);
+    const [gastos, setGastos] = useState(null);
+    const [ingresos, setIngresos] = useState(null);
+
+
     useEffect(() => {
-        getData();
+        getCuentas();
     }, []);
 
-    const getData = async () => {
+    const getCuentas = async () => {
         
         try {
             
@@ -29,9 +33,34 @@ function CuentaDetails() {
         }
     };
 
+    const getGastos = async () => {
+       
+        try {
+
+            const response = await service.get(`/gastos/cuentas/${params.cuentaId}`);
+            setGastos(response.data);
+            console.log(response.data)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const getIngresos = async () => {
+       
+        try {
+
+            const response = await service.get(`/ingresos/cuentas/${params.cuentaId}`);
+            setIngresos(response.data);
+            console.log(response.data)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     if(cuenta === null){
         return <h1>...esperando la data</h1>
     }
+
   return (
     <div>
         <h1>{cuenta.name}</h1>
