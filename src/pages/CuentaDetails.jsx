@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom';
 import service from '../service/service.config';
+import { Button } from 'react-bootstrap';
 
 
 function CuentaDetails() {
@@ -59,6 +60,26 @@ function CuentaDetails() {
         }
     }
 
+     
+    const handleDeleteButton = async () => {
+        const isConfirmed = window.confirm(
+        "¿Quieres borrar la cuenta? Perderás todo el registro"
+        );
+        if (isConfirmed) {
+        try {
+            await service.delete(
+            `/cuentas/${params.cuentaId}`
+            );
+            navigate("/cuentas");
+            alert("Tu cuenta ha sido eliminada de manera exitosa");
+        } catch (error) {
+            navigate("/error");
+        }
+        } else {
+        alert("¿Lo has pensado mejor?");
+        }
+    };
+
     if(cuenta === null){
         return <h1>...esperando la data</h1>
     }
@@ -67,6 +88,7 @@ function CuentaDetails() {
     <div>
         <h1>{cuenta.name}</h1>
         <h3>{cuenta.cantidad}</h3>
+        <Button onClick={handleDeleteButton} variant="primary">Eliminar Cuenta</Button>
     </div>
   )
 }
