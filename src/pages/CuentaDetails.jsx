@@ -85,8 +85,14 @@ function CuentaDetails() {
 
   return (
     <div>
-      <h1>{cuenta.name}</h1>
-      <h3>{cuenta.cantidad}</h3>
+    <h1>Detalles de cuenta</h1>
+      <h3>{cuenta.name}</h3>
+      <h5><span>Balance: </span>{cuenta.cantidad}</h5>
+
+      <h3>Movimientos recientes</h3>
+      {movimientos.map((eachMovimiento) => {
+        <p>{`${eachMovimiento.tipo} Cuantía: ${eachMovimiento.cantidad} Categoría: ${eachMovimiento.categoria}`}</p>
+      })}
 
       {isEditing ? (
         <Form onSubmit={handleEditButton} style={{ marginTop: '20px' }}>
