@@ -8,8 +8,7 @@ function CuentaDetails() {
   const navigate = useNavigate();
 
   const [cuenta, setCuenta] = useState(null);
-  const [gastos, setGastos] = useState(null);
-  const [ingresos, setIngresos] = useState(null);
+  const [movimientos, setMovimientos] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [editedCuenta, setEditedCuenta] = useState({
     name: '',
@@ -18,8 +17,7 @@ function CuentaDetails() {
 
   useEffect(() => {
     getCuentas();
-    getIngresos();
-    getGastos();
+    getMovimientos();
   }, []);
 
   const getCuentas = async () => {
@@ -35,21 +33,11 @@ function CuentaDetails() {
     }
   };
 
-  const getGastos = async () => {
+  const getMovimientos = async () => {
     try {
-      const response = await service.get(`/gastos/cuentas/${params.cuentaId}`);
-      setGastos(response.data);
-      console.log('gastos');
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const getIngresos = async () => {
-    try {
-      const response = await service.get(`/ingresos/cuentas/${params.cuentaId}`);
-      setIngresos(response.data);
-      console.log('ingresos');
+      const response = await service.get(`/movimientos/cuentas/${params.cuentaId}`);
+      setMovimientos(response.data);
+      console.log('movimientos');
     } catch (error) {
       console.log(error);
     }
