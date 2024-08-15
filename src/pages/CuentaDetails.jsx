@@ -1,96 +1,155 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import service from '../service/service.config';
-import { Button } from 'react-bootstrap';
-
+import { Button, Form } from 'react-bootstrap';
 
 function CuentaDetails() {
+  const params = useParams();
+  const navigate = useNavigate();
 
-    const params = useParams();
-    const navigate = useNavigate();
+  const [cuenta, setCuenta] = useState(null);
+  const [gastos, setGastos] = useState(null);
+  const [ingresos, setIngresos] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedCuenta, setEditedCuenta] = useState({
+    name: '',
+    cantidad: 0,
+  });
 
-    const [cuenta, setCuenta] = useState(null);
-    const [gastos, setGastos] = useState(null);
-    const [ingresos, setIngresos] = useState(null);
+  useEffect(() => {
+    getCuentas();
+    getIngresos();
+    getGastos();
+  }, []);
 
-
-    useEffect(() => {
-        getCuentas();
-        getIngresos();
-        getGastos();
-    }, []);
-
-    const getCuentas = async () => {
-        
-        try {
-            
-            const response = await service.get(
-                `/cuentas/${params.cuentaId}`
-            );
-
-            setCuenta(response.data);
-            console.log(response.data);
-
-        } catch (error) {
-            console.log(error)
-        }
-    };
-
-    const getGastos = async () => {
-       
-        try {
-
-            const response = await service.get(`/gastos/cuentas/${params.cuentaId}`);
-            setGastos(response.data);
-            console.log("gastos")
-        } catch (error) {
-            console.log(error)
-        }
+  const getCuentas = async () => {
+    try {
+      const response = await service.get(`/cuentas/${params.cuentaId}`);
+      setCuenta(response.data);
+      setEditedCuenta({
+        name: response.data.name,
+        cantidad: response.data.cantidad,
+      });
+    } catch (error) {
+      console.log(error);
     }
+  };
 
-    const getIngresos = async () => {
-       
-        try {
-
-            const response = await service.get(`/ingresos/cuentas/${params.cuentaId}`);
-            setIngresos(response.data);
-            console.log("ingresos")
-        } catch (error) {
-            console.log(error)
-        }
+  const getGastos = async () => {
+    try {
+      const response = await service.get(`/gastos/cuentas/${params.cuentaId}`);
+      setGastos(response.data);
+      console.log('gastos');
+    } catch (error) {
+      console.log(error);
     }
+  };
 
-     
-    const handleDeleteButton = async () => {
-        const isConfirmed = window.confirm(
-        "¿Quieres borrar la cuenta? Perderás todo el registro"
-        );
-        if (isConfirmed) {
-        try {
-            await service.delete(
-            `/cuentas/${params.cuentaId}`
-            );
-            navigate("/cuentas");
-            alert("Tu cuenta ha sido eliminada de manera exitosa");
-        } catch (error) {
-            navigate("/error");
-        }
-        } else {
-        alert("¿Lo has pensado mejor?");
-        }
-    };
-
-    if(cuenta === null){
-        return <h1>...esperando la data</h1>
+  const getIngresos = async () => {
+    try {
+      const response = await service.get(`/ingresos/cuentas/${params.cuentaId}`);
+      setIngresos(response.data);
+      console.log('ingresos');
+    } catch (error) {
+      console.log(error);
     }
+  };
+
+  const handleDeleteButton = async () => {
+    const isConfirmed = window.confirm(
+      '¿Quieres borrar la cuenta? Perderás todo el registro'
+    );
+    if (isConfirmed) {
+      try {
+        await service.delete(`/cuentas/${params.cuentaId}`);
+        navigate('/cuentas');
+        alert('Tu cuenta ha sido eliminada de manera exitosa');
+      } catch (error) {
+        navigate('/error');
+      }
+    } else {
+      alert('¿Lo has pensado mejor?');
+    }
+  };
+
+  const handleEditButton = async (e) => {
+    e.preventDefault();
+    try {
+      await service.put(`/cuentas/${params.cuentaId}`, editedCuenta);
+      setIsEditing(false);
+      getCuentas();
+    } catch (error) {
+      navigate('/error');
+    }
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setEditedCuenta({
+      ...editedCuenta,
+      [name]: value,
+    });
+  };
+
+  if (cuenta === null) {
+    return <h1>...esperando la data</h1>;
+  }
 
   return (
     <div>
-        <h1>{cuenta.name}</h1>
-        <h3>{cuenta.cantidad}</h3>
-        <Button onClick={handleDeleteButton} variant="primary">Eliminar Cuenta</Button>
+      <h1>{cuenta.name}</h1>
+      <h3>{cuenta.cantidad}</h3>
+
+      {isEditing ? (
+        <Form onSubmit={handleEditButton} style={{ marginTop: '20px' }}>
+          <Form.Group controlId="formNombre">
+            <Form.Label>Nombre</Form.Label>
+            <Form.Control
+              type="text"
+              name="name"
+              value={editedCuenta.name}
+              onChange={handleInputChange}
+              placeholder="Introduce el nombre de la cuenta"
+            />
+          </Form.Group>
+
+          <Form.Group controlId="formCantidad" style={{ marginTop: '10px' }}>
+            <Form.Label>Cantidad</Form.Label>
+            <Form.Control
+              type="number"
+              name="cantidad"
+              value={editedCuenta.cantidad}
+              onChange={handleInputChange}
+              placeholder="Introduce la cantidad"
+            />
+          </Form.Group>
+
+          <Button variant="success" type="submit" style={{ marginTop: '20px' }}>
+            Guardar cambios
+          </Button>
+          <Button
+            variant="secondary"
+            onClick={() => setIsEditing(false)}
+            style={{ marginTop: '20px', marginLeft: '10px' }}
+          >
+            Cancelar
+          </Button>
+        </Form>
+      ) : (
+        <Button
+          onClick={() => setIsEditing(true)}
+          variant="primary"
+          style={{ marginTop: '20px' }}
+        >
+          Editar Cuenta
+        </Button>
+      )}
+
+      <Button onClick={handleDeleteButton} variant="danger" style={{ marginTop: '20px', marginLeft: '10px' }}>
+        Eliminar Cuenta
+      </Button>
     </div>
-  )
+  );
 }
 
-export default CuentaDetails
+export default CuentaDetails;
