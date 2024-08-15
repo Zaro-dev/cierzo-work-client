@@ -27,17 +27,17 @@ function MyNavbar() {
             <Nav className="me-auto">
               {isLoggedIn && <Nav.Link as={Link} to={"/cuentas"}>Cuentas</Nav.Link>}
               <Nav.Link as={Link} to={"/about"}>About</Nav.Link>
-              {isLoggedIn && (
-                <NavLink>
-                  <button onClick={handleLogout}><span>Log Out</span></button>
-                </NavLink>
-              )}
-              <NavDropdown title="Dropdown" id="basic-nav-dropdown">
-                <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
+              <NavDropdown title="Accesos" id="basic-nav-dropdown">
+                <NavDropdown.Item as={Link} to={"/signup"}>Signup</NavDropdown.Item>
+                <NavDropdown.Item as={Link} to={"/login"}>Login</NavDropdown.Item>
+                
+                {isLoggedIn&&
+                <>
                 <NavDropdown.Divider />
-                <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
+                <NavDropdown.Item onClick={handleLogout}>LogOut</NavDropdown.Item>
+                </>
+                }
+                
               </NavDropdown>
             </Nav>
           </Navbar.Collapse>
