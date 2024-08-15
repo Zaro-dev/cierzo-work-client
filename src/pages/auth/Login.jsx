@@ -4,7 +4,7 @@ import Form from 'react-bootstrap/Form';
 
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../../context/auth.context";
+import { AuthContext } from '../../context/auth.context';
 import service from "../../service/service.config";
 
 function Login() {
