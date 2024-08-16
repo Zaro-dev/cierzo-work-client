@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import service from '../service/service.config';
-import { Button, Form, Accordion, Card } from 'react-bootstrap';
+import { Button, Form, Accordion } from 'react-bootstrap';
+import { Pie } from 'react-chartjs-2';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+
+// Registrar los componentes de ChartJS
+ChartJS.register(ArcElement, Tooltip, Legend);
 
 function CuentaDetails() {
   const params = useParams();
@@ -101,7 +106,6 @@ function CuentaDetails() {
   const handleAddMovimiento = async (e) => {
     e.preventDefault();
     try {
-      
       let nuevaCantidad = cuenta.cantidad;
 
       if (newMovimiento.tipo === 'gasto') {
@@ -172,6 +176,36 @@ function CuentaDetails() {
       ...editingMovimiento,
       [name]: value,
     });
+  };
+
+  const calcularGastos = () => {
+    const gastosPorCategoria = movimientos
+      .filter((mov) => mov.tipo === 'gasto')
+      .reduce((acc, mov) => {
+        if (!acc[mov.categoria]) {
+          acc[mov.categoria] = 0;
+        }
+        acc[mov.categoria] += parseFloat(mov.cantidad);
+        return acc;
+      }, {});
+
+    return {
+      labels: Object.keys(gastosPorCategoria),
+      datasets: [
+        {
+          label: 'Gastos por Categoría',
+          data: Object.values(gastosPorCategoria),
+          backgroundColor: [
+            '#FF6384',
+            '#36A2EB',
+            '#FFCE56',
+            '#4BC0C0',
+            '#9966FF',
+            '#FF9F40',
+          ],
+        },
+      ],
+    };
   };
 
   if (cuenta === null) {
@@ -388,6 +422,13 @@ function CuentaDetails() {
           </Button>
         </Form>
       )}
+
+      <hr />
+
+      <h3>Gráfico de Gastos</h3>
+      <div style={{ width: '100%', maxWidth: '600px', margin: '0 auto' }}>
+        <Pie data={calcularGastos()} />
+      </div>
     </div>
   );
 }
