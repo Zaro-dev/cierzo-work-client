@@ -78,7 +78,7 @@ function CuentasPage() {
   }
 
   return (
-    <>
+    <div>
       <h2>Cuentas del Usuario</h2>
       <Button onClick={toggleForm} variant="dark" style={{ display: 'flex' }}>
         {showForm ? 'Cerrar' : 'Añadir'}
@@ -128,7 +128,7 @@ function CuentasPage() {
       <div style={{ width: '100%', maxWidth: '600px', margin: '0 auto' }}>
         <Pie data={repartoBalanceCuentas()} />
       </div>
-    </>
+    <div/>
   );
 }
 
