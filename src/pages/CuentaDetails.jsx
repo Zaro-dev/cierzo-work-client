@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import service from '../service/service.config';
-import { Button, Form } from 'react-bootstrap';
+import { Button, Form, Accordion, Card } from 'react-bootstrap';
 
 function CuentaDetails() {
   const params = useParams();
@@ -21,6 +21,7 @@ function CuentaDetails() {
     categoria: '',
     tipo: 'gasto',
   });
+  const [editingMovimiento, setEditingMovimiento] = useState(null);
 
   useEffect(() => {
     getCuentas();
@@ -134,6 +135,45 @@ function CuentaDetails() {
     }
   };
 
+  const handleDeleteMovimiento = async (movimientoId) => {
+    const isConfirmed = window.confirm('¿Quieres borrar este movimiento?');
+    if (isConfirmed) {
+      try {
+        await service.delete(`/movimientos/${movimientoId}`);
+        getCuentas();
+        getMovimientos();
+        alert('Movimiento eliminado con éxito');
+      } catch (error) {
+        console.log(error);
+        alert('Hubo un error al eliminar el movimiento');
+      }
+    }
+  };
+
+  const handleEditMovimiento = (movimiento) => {
+    setEditingMovimiento(movimiento);
+  };
+
+  const handleUpdateMovimiento = async (e) => {
+    e.preventDefault();
+    try {
+      await service.put(`/movimientos/${editingMovimiento._id}`, editingMovimiento);
+      setEditingMovimiento(null);
+      getMovimientos();
+      getCuentas();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleEditingMovimientoChange = (e) => {
+    const { name, value } = e.target;
+    setEditingMovimiento({
+      ...editingMovimiento,
+      [name]: value,
+    });
+  };
+
   if (cuenta === null) {
     return <h1>...esperando la data</h1>;
   }
@@ -145,11 +185,91 @@ function CuentaDetails() {
       <h5><span>Balance: </span>{cuenta.cantidad}</h5>
 
       <h3>Movimientos recientes</h3>
-      {movimientos.map((eachMovimiento) => (
-        <p key={eachMovimiento._id}>
-          {`${eachMovimiento.tipo} Cuantía: ${eachMovimiento.cantidad} Categoría: ${eachMovimiento.categoria}`}
-        </p>
-      ))}
+      <Accordion>
+        {movimientos.map((eachMovimiento) => (
+          <Accordion.Item eventKey={eachMovimiento._id} key={eachMovimiento._id}>
+            <Accordion.Header>
+              {`${eachMovimiento.tipo} Cuantía: ${eachMovimiento.cantidad} Categoría: ${eachMovimiento.categoria}`}
+            </Accordion.Header>
+            <Accordion.Body>
+              <Button
+                variant="danger"
+                onClick={() => handleDeleteMovimiento(eachMovimiento._id)}
+                style={{ marginRight: '10px' }}
+              >
+                Eliminar
+              </Button>
+              <Button
+                variant="warning"
+                onClick={() => handleEditMovimiento(eachMovimiento)}
+              >
+                Editar
+              </Button>
+
+              {editingMovimiento && editingMovimiento._id === eachMovimiento._id && (
+                <Form onSubmit={handleUpdateMovimiento} style={{ marginTop: '20px' }}>
+                  <Form.Group controlId="formCantidadMovimiento">
+                    <Form.Label>Cantidad</Form.Label>
+                    <Form.Control
+                      type="number"
+                      name="cantidad"
+                      value={editingMovimiento.cantidad}
+                      onChange={handleEditingMovimientoChange}
+                      placeholder="Introduce la cantidad"
+                    />
+                  </Form.Group>
+
+                  <Form.Group controlId="formDescriptionMovimiento" style={{ marginTop: '10px' }}>
+                    <Form.Label>Descripción</Form.Label>
+                    <Form.Control
+                      type="text"
+                      name="description"
+                      value={editingMovimiento.description}
+                      onChange={handleEditingMovimientoChange}
+                      placeholder="Introduce una descripción"
+                    />
+                  </Form.Group>
+
+                  <Form.Group controlId="formCategoriaMovimiento" style={{ marginTop: '10px' }}>
+                    <Form.Label>Categoría</Form.Label>
+                    <Form.Control
+                      type="text"
+                      name="categoria"
+                      value={editingMovimiento.categoria}
+                      onChange={handleEditingMovimientoChange}
+                      placeholder="Introduce una categoría"
+                    />
+                  </Form.Group>
+
+                  <Form.Group controlId="formTipoMovimiento" style={{ marginTop: '10px' }}>
+                    <Form.Label>Tipo</Form.Label>
+                    <Form.Control
+                      as="select"
+                      name="tipo"
+                      value={editingMovimiento.tipo}
+                      onChange={handleEditingMovimientoChange}
+                    >
+                      <option value="gasto">Gasto</option>
+                      <option value="ingreso">Ingreso</option>
+                    </Form.Control>
+                  </Form.Group>
+
+                  <Button variant="success" type="submit" style={{ marginTop: '20px' }}>
+                    Actualizar Movimiento
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    onClick={() => setEditingMovimiento(null)}
+                    style={{ marginTop: '20px', marginLeft: '10px' }}
+                  >
+                    Cancelar
+                  </Button>
+                </Form>
+              )}
+            </Accordion.Body>
+          </Accordion.Item>
+        ))}
+      </Accordion>
 
       {isEditing ? (
         <Form onSubmit={handleEditButton} style={{ marginTop: '20px' }}>
