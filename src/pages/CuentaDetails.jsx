@@ -223,7 +223,7 @@ function CuentaDetails() {
         {movimientos.map((eachMovimiento) => (
           <Accordion.Item eventKey={eachMovimiento._id} key={eachMovimiento._id}>
             <Accordion.Header>
-              {`${eachMovimiento.tipo} Cuantía: ${eachMovimiento.cantidad} Categoría: ${eachMovimiento.categoria}`}
+              {`${eachMovimiento.tipo} // Cuantía: ${eachMovimiento.cantidad}€ // Categoría: ${eachMovimiento.categoria}`}
             </Accordion.Header>
             <Accordion.Body>
               <Button
