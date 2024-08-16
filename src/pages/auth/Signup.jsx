@@ -48,7 +48,7 @@ function Signup() {
   return (
     <>
        <Form onSubmit={handleSignup}>
-       <Form.Group className="mb-3" controlId="formBasicPassword">
+       <Form.Group className="mb-3" controlId="formBasicName">
         <Form.Label>Nombre</Form.Label>
         <Form.Control type="name" placeholder="Nombre"  onChange={handleNameChange}/>
       </Form.Group>

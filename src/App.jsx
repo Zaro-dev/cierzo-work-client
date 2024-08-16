@@ -11,10 +11,13 @@ import MovimientosPage from './pages/MovimientosPage';
 import GastosPage from './pages/GastosPage';
 import IngresosPage from './pages/IngresosPage';
 import CuentaDetails from './pages/CuentaDetails';
+import AboutPage from './pages/AboutPage';
+
 
 // COMPONENTS
 import MyNavbar from './components/Navbar'
 import Footer from './components/Footer';
+
 
 
 function App() {
@@ -33,6 +36,7 @@ function App() {
       <Route path='/movimientos' element={<MovimientosPage/>}/>
       <Route path='/movimientos/gastos' element={<GastosPage/>}/>
       <Route path='/movimientos/ingresos' element={<IngresosPage/>}/>
+      <Route path='about' element={<AboutPage/>}/>
       </Routes>
 
       <Footer />
