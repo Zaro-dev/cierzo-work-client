@@ -26,7 +26,7 @@ function MyNavbar() {
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
               {isLoggedIn && <Nav.Link as={Link} to={"/cuentas"}>Cuentas</Nav.Link>}
-              <Nav.Link as={Link} to={"/about"}>About</Nav.Link>
+              {/* <Nav.Link as={Link} to={"/about"}>About</Nav.Link> */}
               <NavDropdown title="Accesos" id="basic-nav-dropdown">
                 <NavDropdown.Item as={Link} to={"/signup"}>Signup</NavDropdown.Item>
                 <NavDropdown.Item as={Link} to={"/login"}>Login</NavDropdown.Item>

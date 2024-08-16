@@ -216,7 +216,7 @@ function CuentaDetails() {
     <div>
       <h1>Detalles de cuenta</h1>
       <h3>{cuenta.name}</h3>
-      <h5><span>Balance: </span>{cuenta.cantidad}</h5>
+      <h5><span>Balance: </span>{cuenta.cantidad} €</h5>
 
       <h3>Movimientos recientes</h3>
       <Accordion>
