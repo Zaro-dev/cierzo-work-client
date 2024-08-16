@@ -19,8 +19,8 @@ function MyNavbar() {
 
   return (
     <>
-      <Navbar expand="lg" className="bg-body-tertiary">
-        <Container>
+      <Navbar expand="lg" className="bg-body-tertiary" variant="dark">
+
           <Navbar.Brand as={Link} to={"/"}>Cierzo Finances</Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
@@ -41,7 +41,7 @@ function MyNavbar() {
               </NavDropdown>
             </Nav>
           </Navbar.Collapse>
-        </Container>
+
       </Navbar>
     </>
   );

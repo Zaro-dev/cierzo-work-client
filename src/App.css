@@ -32,3 +32,33 @@ footer a:hover {
 footer img {
   height: 30px;
 }
+
+.elemento-welcome{
+  margin-top: 0%;
+  margin-bottom: 5%;
+}
+/* Cuentas */
+
+.container-padre-cuentas{
+  margin: 30px;
+}
+
+.container-welcome{
+  text-align: center;
+  height: 70vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+
+.navbar {
+  background-image: linear-gradient(to right, rgb(4, 4, 19), rgb(4, 4, 19));
+}
+
+.contenedor-cartas{
+  /* border: solid; */
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+

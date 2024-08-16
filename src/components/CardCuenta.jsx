@@ -7,8 +7,8 @@ function CardCuenta(props) {
 
     const {name, cantidad, _id } = props.eachCuenta;
   return (
-    <div>
-        <Card style={{ width: '18rem' }}>
+    <div >
+        <Card style={{ width: '10vw' }}>
       <Card.Body>
         <Card.Title>{name}</Card.Title>
         <Card.Subtitle className="mb-2 text-muted">Balance:</Card.Subtitle>

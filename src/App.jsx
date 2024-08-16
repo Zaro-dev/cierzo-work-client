@@ -22,7 +22,7 @@ import MyNavbar from './components/Navbar'
 function App() {
 
   return (
-    <div>
+    <>
 
       <MyNavbar />
 
@@ -37,7 +37,7 @@ function App() {
       <Route path='/movimientos/ingresos' element={<IngresosPage/>}/>
       <Route path='about' element={<AboutPage/>}/>
       </Routes>
-    </div>
+    </>
   )
 }
 
