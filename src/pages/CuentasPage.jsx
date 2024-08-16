@@ -3,11 +3,15 @@ import { useNavigate } from 'react-router-dom';
 import service from '../service/service.config';
 import CardCuenta from '../components/CardCuenta';
 import { Button, Form } from 'react-bootstrap';
+import { Pie } from 'react-chartjs-2';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+
+ChartJS.register(ArcElement, Tooltip, Legend);
 
 function CuentasPage() {
   const [cuentas, setCuentas] = useState([]);
   const [showForm, setShowForm] = useState(false);
-  const [newCuenta, setNewCuenta] = useState({ name: '', cantidad: '' }); // Cambiado a los nombres correctos
+  const [newCuenta, setNewCuenta] = useState({ name: '', cantidad: '' });
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -35,15 +39,38 @@ function CuentasPage() {
     e.preventDefault();
     try {
       await service.post('/cuentas', {
-        name: newCuenta.name,      // Enviamos el campo `name`
-        cantidad: Number(newCuenta.cantidad)  // Convertimos `cantidad` a número
+        name: newCuenta.name,
+        cantidad: Number(newCuenta.cantidad)
       });
-      getData(); // Refrescamos la lista de cuentas
-      setNewCuenta({ name: '', cantidad: '' }); // Limpiamos el formulario
-      setShowForm(false); // Ocultamos el formulario
+      getData();
+      setNewCuenta({ name: '', cantidad: '' });
+      setShowForm(false);
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const repartoBalanceCuentas = () => {
+    const labels = cuentas.map(cuenta => cuenta.name);
+    const data = cuentas.map(cuenta => cuenta.cantidad);
+
+    return {
+      labels,
+      datasets: [
+        {
+          label: 'Distribución de Balance por Cuenta',
+          data,
+          backgroundColor: [
+            '#8B0000',
+            '#00008B',
+            '#8B8B00',
+            '#006400',
+            '#4B0082',
+            '#8B4513',
+          ],
+        },
+      ],
+    };
   };
 
   if (cuentas === null) {
@@ -52,8 +79,8 @@ function CuentasPage() {
 
   return (
     <>
-      <h2>Cuentas</h2>
-      <Button onClick={toggleForm} variant="primary" style={{ display: 'flex' }}>
+      <h2>Cuentas del Usuario</h2>
+      <Button onClick={toggleForm} variant="dark" style={{ display: 'flex' }}>
         {showForm ? 'Cerrar' : 'Añadir'}
       </Button>
 
@@ -63,7 +90,7 @@ function CuentasPage() {
             <Form.Label>Nombre</Form.Label>
             <Form.Control
               type="text"
-              name="name" // Usamos `name` en lugar de `nombre`
+              name="name"
               value={newCuenta.name}
               onChange={handleInputChange}
               placeholder="Introduce el nombre de la cuenta"
@@ -74,7 +101,7 @@ function CuentasPage() {
             <Form.Label>Balance</Form.Label>
             <Form.Control
               type="number"
-              name="cantidad" // Usamos `cantidad` en lugar de `balance`
+              name="cantidad"
               value={newCuenta.cantidad}
               onChange={handleInputChange}
               placeholder="Introduce el balance"
@@ -93,6 +120,13 @@ function CuentasPage() {
             <CardCuenta eachCuenta={eachCuenta} />
           </div>
         ))}
+      </div>
+
+      <hr />
+
+      <h3>Gráfico reparto balance</h3>
+      <div style={{ width: '100%', maxWidth: '600px', margin: '0 auto' }}>
+        <Pie data={repartoBalanceCuentas()} />
       </div>
     </>
   );

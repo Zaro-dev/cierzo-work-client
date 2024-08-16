@@ -16,7 +16,6 @@ import AboutPage from './pages/AboutPage';
 
 // COMPONENTS
 import MyNavbar from './components/Navbar'
-import Footer from './components/Footer';
 
 
 
@@ -38,8 +37,6 @@ function App() {
       <Route path='/movimientos/ingresos' element={<IngresosPage/>}/>
       <Route path='about' element={<AboutPage/>}/>
       </Routes>
-
-      <Footer />
     </div>
   )
 }

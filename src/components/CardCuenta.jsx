@@ -13,7 +13,7 @@ function CardCuenta(props) {
         <Card.Title>{name}</Card.Title>
         <Card.Subtitle className="mb-2 text-muted">Balance:</Card.Subtitle>
         <Card.Text>{cantidad}</Card.Text>
-        <Link to={`/cuentas/${_id}`}><Button variant="primary">Info</Button></Link>
+        <Link to={`/cuentas/${_id}`}><Button variant="dark">Info</Button></Link>
       </Card.Body>
     </Card>
     </div>

@@ -13,3 +13,6 @@
   -moz-osx-font-smoothing: grayscale;
 } */
 
+body{
+  font-family: Andale Mono, monospace;
+}
