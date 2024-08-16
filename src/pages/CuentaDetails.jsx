@@ -44,7 +44,6 @@ function CuentaDetails() {
     try {
       const response = await service.get(`/movimientos/cuentas/${params.cuentaId}`);
       setMovimientos(response.data);
-      console.log('movimientos');
     } catch (error) {
       console.log(error);
     }
@@ -101,18 +100,35 @@ function CuentaDetails() {
   const handleAddMovimiento = async (e) => {
     e.preventDefault();
     try {
+      
+      let nuevaCantidad = cuenta.cantidad;
+
+      if (newMovimiento.tipo === 'gasto') {
+        nuevaCantidad -= parseFloat(newMovimiento.cantidad);
+      } else if (newMovimiento.tipo === 'ingreso') {
+        nuevaCantidad += parseFloat(newMovimiento.cantidad);
+      }
+
+      await service.put(`/cuentas/${params.cuentaId}`, {
+        ...cuenta,
+        cantidad: nuevaCantidad,
+      });
+
       await service.post(`/movimientos`, {
         ...newMovimiento,
         cuenta: params.cuentaId,
       });
+
       setShowFormMovimiento(false);
+      getCuentas();
       getMovimientos();
+
       setNewMovimiento({
         cantidad: 0,
         description: '',
         categoria: '',
         tipo: 'gasto',
-      }); 
+      });
     } catch (error) {
       console.log(error);
     }
